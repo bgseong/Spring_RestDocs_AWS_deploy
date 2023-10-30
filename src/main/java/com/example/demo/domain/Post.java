@@ -3,7 +3,10 @@ package com.example.demo.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
 public class Post {

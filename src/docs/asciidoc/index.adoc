@@ -1,0 +1,13 @@
+= TEST API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels:2
+:sectlinks:
+
+== 글 작성
+operation::post-create[snippets='http-request,request-fields,http-response']
+
+== 글 조회
+operation::post-inquiry[snippets='http-request,http-response']
