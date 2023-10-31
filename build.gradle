@@ -45,12 +45,11 @@ test {
 }
 
 asciidoctor {
-	dependsOn test // test 작업 이후에 작동하도록 하는 설정
-	configurations 'asciidoctorExtensions' // 위에서 작성한 configuration 적용
-	inputs.dir snippetsDir // snippetsDir 를 입력으로 구성
+	dependsOn test
+	configurations 'asciidoctorExtensions'
+	inputs.dir snippetsDir
 
-	// source가 없으면 .adoc파일을 전부 html로 만들어버림
-	// source 지정시 특정 adoc만 HTML로 만든다.
+
 	sources{
 		include("**/index.adoc","**/common/*.adoc")
 	}

@@ -11,3 +11,10 @@ operation::post-create[snippets='http-request,request-fields,http-response']
 
 == 글 조회
 operation::post-inquiry[snippets='http-request,http-response']
+
+== 글 수정
+operation::post-update[snippets='http-request,request-fields,path-parameters,http-response']
+
+== 글 삭제
+operation::post-delete[snippets='http-request,http-response']
+

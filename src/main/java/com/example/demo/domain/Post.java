@@ -31,8 +31,4 @@ public class Post {
         this.create_time = System.currentTimeMillis();
     }
 
-    @PreUpdate
-    public void onPreUpdate(){
-        this.modify_time = System.currentTimeMillis();
-    }
 }
