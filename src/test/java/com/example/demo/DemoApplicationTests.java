@@ -3,22 +3,18 @@ package com.example.demo;
 import com.example.demo.domain.Post;
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.UpdateRequest;
-import com.example.demo.repository.PostRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.demo.global.DataBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.sql.Update;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.restdocs.RestDocsAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 
@@ -37,7 +33,7 @@ class DemoApplicationTests {
 	@Autowired
 	ObjectMapper objectMapper;
 	@Autowired
-	PostRepository postRepository;
+	DataBase dataBase;
 
 
 	@Test
@@ -74,7 +70,7 @@ class DemoApplicationTests {
 				.body("본문")
 				.build();
 
-		Post savedPost = postRepository.save(post);
+		Post savedPost = dataBase.save(post);
 
 
 		mockMvc.perform(RestDocumentationRequestBuilders.get("/api/test/post/{postId}",savedPost.getId())
@@ -96,7 +92,6 @@ class DemoApplicationTests {
 	}
 
 	@Test
-	@Transactional
 	void update() throws Exception {
 		Post post = Post.builder()
 				.title("제목")
@@ -110,10 +105,9 @@ class DemoApplicationTests {
 
 		String requestJson = objectMapper.writeValueAsString(request);
 
-		Post savedPost = postRepository.save(post);
-		savedPost.setTitle(request.getTitle());
-		savedPost.setBody(request.getBody());
-		savedPost.setModify_time(System.currentTimeMillis());
+		Post savedPost = dataBase.save(post);
+		savedPost = dataBase.update(savedPost.getId(),request);
+
 
 		mockMvc.perform(RestDocumentationRequestBuilders.put("/api/test/post/{postId}",savedPost.getId())
 						.contentType(MediaType.APPLICATION_JSON)
@@ -148,8 +142,8 @@ class DemoApplicationTests {
 				.body("본문")
 				.build();
 
-		Post savedPost = postRepository.save(post);
-		postRepository.deleteById(savedPost.getId());
+		Post savedPost = dataBase.save(post);
+		dataBase.delete(savedPost.getId());
 		mockMvc.perform(RestDocumentationRequestBuilders.delete("/api/test/post/{postId}",savedPost.getId())
 						.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
